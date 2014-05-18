@@ -5,7 +5,7 @@
     <groupId>org.primefaces</groupId>
     <artifactId>showcase</artifactId>
     <packaging>war</packaging>
-    <version>5.0</version>
+    <version>5.0.1-SNAPSHOT</version>
 
     <name>showcase</name>
     <url>http://maven.apache.org</url>
