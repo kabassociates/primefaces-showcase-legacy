@@ -83,7 +83,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.2</version>
+            <version>2.4</version>
         </dependency>
         
         <!-- FeedReader -->
@@ -204,13 +204,13 @@
             </activation>
             <properties>
                 <jsfVersion>Mojarra-2.2.6</jsfVersion>
-                <primefacesVersion>PrimeFaces-5.0.1-CR-SNAPSHOT</primefacesVersion>
+                <primefacesVersion>PrimeFaces-5.0.2-SNAPSHOT</primefacesVersion>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.primefaces</groupId>
                     <artifactId>primefaces</artifactId>
-                    <version>5.0.1-CR-SNAPSHOT</version>
+                    <version>5.0.2-SNAPSHOT</version>
                 </dependency>
                 <dependency>
                     <groupId>org.glassfish</groupId>
