@@ -3,10 +3,10 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                template="./template.xhtml">
 
     <ui:define name="title">
-        DataTable - <span class="subitem">Basic</span>
+        DataTable - <span class="subitem">Paginator</span>
     </ui:define>
 
     <ui:define name="description">
@@ -73,18 +73,15 @@
                 <pre name="code" class="brush:java">
 package org.primefaces.showcase.view.data.datatable;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import org.primefaces.showcase.domain.Car;
 import org.primefaces.showcase.service.CarService;
 
-@ManagedBean(name="dtBasicView")
-@ViewScoped
-public class BasicView implements Serializable {
+@ManagedBean(name="dtPaginatorView")
+public class PaginatorView {
     
     private List&lt;Car&gt; cars;
     
@@ -93,7 +90,7 @@ public class BasicView implements Serializable {
 
     @PostConstruct
     public void init() {
-        cars = service.createCars(10);
+        cars = service.createCars(50);
     }
     
     public List&lt;Car&gt; getCars() {

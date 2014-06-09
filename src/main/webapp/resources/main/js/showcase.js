@@ -12,13 +12,13 @@ $(document).ready(function() {
         categoryLinks: $(".MainLinkText"),
         
         menuVisible: false,
-        
-        hiddenLogo: $("#hiddenLogoTextEl"),
-        
+                
         logo: $('#LOGO'),
         
-        hiddenCategoryIcons: $('.hiddenIcons'),
+        hiddenMenuIcons: $('.hiddenIcons'),
         
+        hiddenLogo: $('#BlueLogo'),
+                
         submenus: $('.SubMenuLinkContainer'),
         
         searchInput: $('#menuSearch'),
@@ -31,51 +31,24 @@ $(document).ready(function() {
         
         mobileContainer: $(document.body).children('.MOBILE'),
         
-        activeMenu: null,
+        activeMenu: window.activeMenu,
         
         activeSubSubMenu: null,
 
-        openMenu: function() {
-            var $this = this;
-            this.menuVisible = true;
+        highlightMenu: function() {
             this.clearMenuAnimQueue();
-    
-            this.menu.animate({'width':450},500,"easeInOutQuint", function(){
-                $this.menu.perfectScrollbar('update');
-                $this.categoryLinks.animate({'opacity':1,'margin-left':50},100);
-                $this.hiddenLogo.fadeIn(100);
-                $this.searchInput.slideDown(200);
-            });
-            this.logo.animate({'width':440},700,"easeInOutQuint");
-            this.hiddenCategoryIcons.animate({'opacity':1},1000);
-            this.content.animate({'opacity':0.6});
+            this.hiddenMenuIcons.animate({opacity:1}, 250);
+            this.hiddenLogo.animate({opacity:1}, 250);
         },
 
-        hideMenu: function() {
-            var $this = this;
-            this.menuVisible = false;
+        unhighlightMenu: function() {
             this.clearMenuAnimQueue();
-            
-            this.menu.animate({'width':85},700,"easeInOutQuint", function(){
-                $this.menu.perfectScrollbar('update');
-            });
-            this.logo.animate({'width':75},700,"easeInOutQuint");
-            this.hiddenLogo.fadeOut(100);
-            this.categoryLinks.animate({'opacity':0,'margin-left':60},100);
-            this.hiddenCategoryIcons.animate({'opacity':0},1000);
-            this.searchInput.slideUp(200);
-            this.content.animate({'opacity':1});
-            this.hideSubMenus();
+            this.hiddenMenuIcons.animate({opacity:0}, 250);
+            this.hiddenLogo.animate({opacity:0}, 250);
         },
         
         clearMenuAnimQueue: function() {
-            this.menu.clearQueue();
-            this.categoryLinks.clearQueue();
-            this.logo.clearQueue();
-            this.hiddenLogo.clearQueue();
-            this.hiddenCategoryIcons.clearQueue();
-            this.content.clearQueue();
-            this.searchInput.clearQueue();
+            
         },
         
         onWinResize: function() {
@@ -106,16 +79,19 @@ $(document).ready(function() {
                 if(this.activeMenu === header) {
                     headerJQ.removeClass('MenuSideMainLinkDark').next().slideUp(700,"easeInOutQuint");
                     this.activeMenu = null;
+                    $.removeCookie('menustate', {path: '/'});
                 }
                 else {
                     $(this.activeMenu).removeClass('MenuSideMainLinkDark').next().slideUp(700,"easeInOutQuint");
                     headerJQ.addClass("MenuSideMainLinkDark").next().slideDown(700,"easeInOutQuint");
                     this.activeMenu = header;
+                    $.cookie('menustate', headerJQ.attr('id'), {path: '/'});
                 }
             }
             else {
                 headerJQ.addClass("MenuSideMainLinkDark").next().slideDown(700,"easeInOutQuint");
                 this.activeMenu = header;
+                $.cookie('menustate', headerJQ.attr('id'), {path: '/'});
             }
         },
         
@@ -146,20 +122,10 @@ $(document).ready(function() {
     	
 	// menu mouseenter & mouseleave actions start ----------------------------------
 	Showcase.menu.on("mouseenter", function() {
-        clearTimeout(Showcase.menuHideTimeout);
-        Showcase.menuShowTimeout = setTimeout(function() {
-            if(!Showcase.menuVisible) {
-                Showcase.openMenu();
-            }
-        }, 250);
+        Showcase.highlightMenu();
 	})
 	.on("mouseleave", function() {
-        clearTimeout(Showcase.menuShowTimeout);
-        Showcase.menuHideTimeout = setTimeout(function() {
-            if(Showcase.menuVisible) {
-                Showcase.hideMenu();
-            };
-        }, 250);
+        Showcase.unhighlightMenu();
 	});
     
     // open theme switcher combo
@@ -220,17 +186,14 @@ $(document).ready(function() {
             $(this).val($(this).val()+" ");
         }
         var searchValue = $(this).val().toLowerCase(),
-        matchSub = false,
-        matchSubSub = false, 
-        matchMenuSide = false;
+        matchSub = false;
 
         $('.SubMenuLinkContainer').each(function() {
             var MenuSideValue = $(this).prev().children('span').text().trim().toLowerCase(),
             itemValue;
             
             if(MenuSideValue.search(searchValue) < 0 || searchValue.length === 0) {  
-                var Sub = $(this).children(':not(span)'),
-                SubSub = $(this).children('span');
+                var Sub = $(this).children('a');
 
                 for(var i = 0; i < Sub.length; i++) {     //for SubMenu
                     itemValue = Sub.eq(i).text().trim().toLowerCase();
@@ -243,41 +206,9 @@ $(document).ready(function() {
                     }
                 }
                 
-                for(var j = 0; j < SubSub.length; j++) {  //for SubsubMenu
-                    var SubSuba = SubSub.eq(j).find('a'),
-                    SubSubText = SubSub.eq(j).text().toLowerCase().split(" ")[1]; // text of <span> SubMenuLink
-                    if(SubSubText.search(searchValue) >= 0) {
-                        SubSub.eq(j).show();
-                        SubSuba.show();
-                        matchMenuSide = true;
-                    }
-                    else { 
-                        for(var m = 0; m < SubSuba.length; m++) {
-                            itemValue = SubSuba.eq(m).text().toLowerCase();
-                            if(itemValue.search(searchValue) >= 0) {
-                                SubSuba.eq(m).show();
-                                matchSubSub = true; 
-                                matchMenuSide = true;
-                            }
-                            else {
-                                SubSuba.eq(m).hide();
-                            }
-                        }
-
-                        if(matchSubSub) {
-                            SubSub.eq(j).show();
-                            matchSubSub = false;
-                        }
-                        else {
-                            SubSub.eq(j).hide();
-                        }
-                    }
-                }
-                
-                if(matchSub || matchMenuSide ) {
+                if(matchSub) {
                     $(this).prev().show();
                     matchSub = false;
-                    matchMenuSide = false;
                 }
                 else {
                     $(this).prev().hide();
@@ -292,3 +223,130 @@ $(document).ready(function() {
    
    window.Showcase = Showcase;
 });
+
+function restoreMenuState() {
+    var activeMenuId = $.cookie('menustate');
+    window.activeMenu = document.getElementById(activeMenuId);
+    
+    if(window.activeMenu) {
+        $(window.activeMenu).addClass('MenuSideMainLinkDark').next('.SubMenuLinkContainer').show();
+    }
+}
+
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));

@@ -27,7 +27,7 @@
     </ui:define>
 
     <ui:define name="description">
-        DataGrid displays data in a list layout.
+        DataList displays data in a list layout.
     </ui:define>
 
     <ui:define name="implementation">
@@ -169,7 +169,7 @@ public class DataListView implements Serializable {
     
     private Car selectedCar;
     
-    @ManagedProperty("#{carService}")
+    @ManagedProperty("\#{carService}")
     private CarService service;
     
     @PostConstruct
