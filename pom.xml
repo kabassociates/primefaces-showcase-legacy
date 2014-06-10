@@ -5,7 +5,7 @@
     <groupId>org.primefaces</groupId>
     <artifactId>showcase</artifactId>
     <packaging>war</packaging>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>5.0.3-SNAPSHOT</version>
 
     <name>showcase</name>
     <url>http://maven.apache.org</url>
@@ -204,13 +204,13 @@
             </activation>
             <properties>
                 <jsfVersion>Mojarra-2.2.6</jsfVersion>
-                <primefacesVersion>PrimeFaces-5.0.2-SNAPSHOT</primefacesVersion>
+                <primefacesVersion>PrimeFaces-5.0.3-SNAPSHOT</primefacesVersion>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.primefaces</groupId>
                     <artifactId>primefaces</artifactId>
-                    <version>5.0.2-SNAPSHOT</version>
+                    <version>5.0.3-SNAPSHOT</version>
                 </dependency>
                 <dependency>
                     <groupId>org.glassfish</groupId>
