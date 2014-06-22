@@ -1,6 +1,8 @@
 # README 
 
-Local copy primefaces showcase repository new generation.
+Local copy primefaces showcase repository version 5.0 and later. Orginal sourses are available at google code svn repository, http://primefaces.googlecode.com/svn/showcase/trunk/
+
+Master branch of this repository is aligned with orginal sources.
 
 ## How to run showcase
 
@@ -30,3 +32,8 @@ Running showcase with stable version of Primefaces github releases ...
 * Execute following maven command to GITHUB profile
 
 `mvn clean jetty:run -Pgithub`
+
+### TODO List
+
+Orginal sources in master branch removed the support for testing sample with different version of JSF libraries and testing with myfaces JSF library. additional versions and myfaces would added to 5.0.x branch soon.
+ 
