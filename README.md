@@ -9,7 +9,7 @@ Rollup your sleeve, get ready to your hands wet with primefaces coding ...
 #### For those familer with Github
 * Clone this repository
 * Checkout branch 5.0.x
-* Issue following maven command
+* Execute following maven command
 
 `mvn clean jetty:run` 
  
@@ -23,6 +23,9 @@ Running showcase with SNAPSHOT version of Primefaces...
 
 ### Running GITHUB profile
 
-Running showcase with SNAPSHOT version of Primefaces... 
+Running showcase with stable version of Primefaces github releases ... 
 
-* Steps TODO
+* Execute following maven command to GITHUB profile
+
+`mvn clean jetty:run -Pgithub`
+
